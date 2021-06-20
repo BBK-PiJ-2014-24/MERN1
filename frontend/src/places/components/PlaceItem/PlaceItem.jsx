@@ -4,6 +4,7 @@ import React, {useState} from 'react';
 import Card from '../../../shared/components/UIElements/Card';
 import Button from '../../../shared/components/FormElements/Button';
 import Modal from '../../../shared/components/UIElements/Modal';
+import YaMap from '../../../shared/components/UIElements/YaMap';
 
 import './PlaceItem.css';
 
@@ -29,7 +30,7 @@ function PlaceItem(props){
                    footer={<Button onClick={closeMapHandler}>CLOSE</Button>}   
             >
                <div className='map-container'>
-                    <h2>THE MAP</h2>
+                    <YaMap coordinates={props.coordinates} />
                </div> 
             </Modal>
             <li className='place-item'>

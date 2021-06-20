@@ -2,6 +2,7 @@ import React from 'react'
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import NewPlace from './places/pages/NewPlace/NewPlace';
 import UserPlaces from './places/pages/UserPlaces/UserPlaces';
+import UpdatePlace from './places/pages/UpdatePlace/UpdatePlace';
 import Users from './user/pages/Users';
 import MainNavigation from './shared/components/Navigation/MainNavigation/MainNavigation';
 
@@ -22,6 +23,9 @@ function App() {
             </Route>
             <Route exact path='/places/new'>
               <NewPlace />
+            </Route>
+            <Route exact path='/places/:placeId'>
+              <UpdatePlace />
             </Route>
             <Redirect to='/' />
           </Switch>
