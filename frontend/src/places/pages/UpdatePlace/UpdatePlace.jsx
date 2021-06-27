@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 
 import Input from '../../../shared/components/FormElements/Input';
 import Button from '../../../shared/components/FormElements/Button';
+import Card from '../../../shared/components/UIElements/Card';
 
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../../shared/util/validators';
 
@@ -41,56 +42,88 @@ const  DUMMY_PLACES = [
 function UpdatePlace(props){
     const placeId = useParams().placeId;
 
+    const [isLoading, setIsLoading] = useState(true);
+    
+    const [formState, inputHandler, setFormData] = useForm( {
+        title: { 
+            value: '',
+            isValid: false,
+        },
+        description: { 
+            value: '',
+            isValid: false,    
+        },
+    }, false);
+    
+
     const selectedPlace = DUMMY_PLACES.find( p => p.id === placeId);
    
-    const [formState, inputHandler] = useForm( {
-                    title: { 
-                        value: selectedPlace.title,
-                        isValid: true,
-                    },
-                    description: { 
-                        value: selectedPlace.description,
-                        isValid: true,    
-                    },
-                }, true);
+    useEffect( () => {
+        if(selectedPlace){
+            setFormData({
+                title: { 
+                    value: selectedPlace.title,
+                    isValid: true,
+                },
+                description: { 
+                    value: selectedPlace.description,
+                    isValid: true,    
+                },
+            }, true);
+        }
+        console.log('loading before?', isLoading );
+        setIsLoading(false);
+        setTimeout(()=> console.log('loading after?', isLoading ), 1000);
+    }, [setFormData, selectedPlace]);
 
     if(!selectedPlace){
         return (
             <div className='center'>
-                <h2>Place Not Found</h2>
+                <Card>
+                    <h2>Place Not Found</h2>
+                </Card>
             </div>
         );
 
     }
 
+    if(isLoading){
+        // console.log('check loading')
+        return (
+            <div className='center'>
+                <h2>Loading.... :</h2>
+            </div>
+        )
+    }
+
     const placeUpdateSubmitHandler = event => {
         event.preventDefault();
-        console.log(formState.inputs);
+        // console.log(formState.inputs);
     };
 
     return (
-        <form className='place-form' onSubmit={placeUpdateSubmitHandler}>
-           <Input id='title' 
-                  element='input'
-                  type='text'
-                  label='Title'
-                  validators={ [VALIDATOR_REQUIRE()] }
-                  errorText='Incorrect Title'
-                  onInput={inputHandler}
-                  initialValue={formState.inputs.title.value}
-                  initialValid={formState.inputs.title.value}
-                />
-           <Input id='description' 
-                  element='textarea'
-                  label='Description'
-                  validators={ [VALIDATOR_MINLENGTH(5)] }
-                  errorText='Incorrect Title'
-                  onInput={inputHandler}
-                  initialValue={formState.inputs.description.value}
-                  initialValid={formState.inputs.description.isValid}
-                />
-            <Button type='submit' disabled={!formState.isValid}>UPDATE PLACE</Button>    
-        </form>
+            <form className='place-form' onSubmit={placeUpdateSubmitHandler}>
+            <Input id='title' 
+                    element='input'
+                    type='text'
+                    label='Title'
+                    validators={ [VALIDATOR_REQUIRE()] }
+                    errorText='Incorrect Title'
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.title.value}
+                    initialValid={formState.inputs.title.value}
+                    />
+            <Input id='description' 
+                    element='textarea'
+                    label='Description'
+                    validators={ [VALIDATOR_MINLENGTH(5)] }
+                    errorText='Incorrect Title'
+                    onInput={inputHandler}
+                    initialValue={formState.inputs.description.value}
+                    initialValid={formState.inputs.description.isValid}
+                    />
+                <Button type='submit' disabled={!formState.isValid}>UPDATE PLACE</Button>    
+            </form>
     );
 }
 

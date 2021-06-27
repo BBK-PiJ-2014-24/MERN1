@@ -18,7 +18,7 @@ const  DUMMY_PLACES = [
     },
     {
         id: 'p2',
-        title: 'Empire State Building',
+        title: 'Empire States Building',
         description: 'SkyScraper',
         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg',
         address: '20 W 34th St, New York, NY 10001, United States',
