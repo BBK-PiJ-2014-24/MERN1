@@ -4,7 +4,7 @@ import Input from '../../../shared/components/FormElements/Input';
 import Button from '../../../shared/components/FormElements/Button';
 import ErrorModal from '../../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../../shared/components/UIElements/LoadingSpinner';
-
+import { useHttpClient } from '../../../shared/hooks/http-hook';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../shared/util/validators';
 
 import useForm from '../../../shared/hooks/form-hook';
@@ -14,11 +14,10 @@ import './Auth.css';
 
 function Auth(props) {
 
-    const auth = useContext(AuthContext);
+    // const auth = useContext(AuthContext);
 
     const [isLoginMode, setIsLoginMode] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
+    const {isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const [formState, inputHandler, setFormData] = useForm({
         email: {
@@ -66,39 +65,19 @@ function Auth(props) {
             };
         }
 
-
-
-        setIsLoading(true);
-        console.log('login mode', isLoginMode);
         if (isLoginMode) {
-            try {
-                const response = await fetch(urlLogin, loginConfig);
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.message);
-                }
-                console.log(data);
-                setIsLoading(false);
+            try{
+                await sendRequest(urlLogin, loginConfig.method, loginConfig.body, loginConfig.headers );
                 auth.login();
-            } catch (err) {
-                console.log(err);
-                setIsLoading(false);
-                setError(err.message || 'Failed To Fetch');
+            } catch(err) {
+                console.log(err.message);
             }
         } else {
             try {
-                const response = await fetch(urlSignUp, signUpConfig);
-                const data = await response.json();
-                if (!response.ok) {
-                    throw new Error(data.message);
-                }
-                console.log(data);
-                setIsLoading(false);
+                await sendRequest(urlSignUp, signUpConfig.method, signUpConfig.body, signUpConfig.headers);
                 auth.login();
             } catch (err) {
                 console.log(err);
-                setIsLoading(false);
-                setError(err.message || 'Failed To Fetch');
             }
         }
     }
@@ -122,15 +101,11 @@ function Auth(props) {
         setIsLoginMode(prevState => !prevState);
     }
 
-    const errorHandler = () => {
-        setError(null);
-    }
 
     return (
         <React.Fragment>
             <ErrorModal error={error}
-                onClear={errorHandler}
-
+                onClear={clearError}
             />
 
             <Card className='authentication'>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import UsersList from '../components/UsersList/UsersList';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import {useHttpClient} from '../../shared/hooks/http-hook';
 
 function Users(props){
 
@@ -15,41 +16,31 @@ function Users(props){
 
     const url = 'http://localhost:5000/api/users';
 
-    const [isLoading, setIsLoading] = useState(false);
     const [loadedUsers, setLoadedUsers] = useState();
-    const [error, setError] = useState();
+    // const [isLoading, setIsLoading] = useState(false);
+    // const [error, setError] = useState();
+    const {isLoading, error, sendRequest, clearError} = useHttpClient();
 
 
 
     // An empty [] dependcy array means that it only runs once
     // useEffect cannot return a promise directly. Instead, call a fn that calls a promise.
     useEffect(() => {
-       const sendRequest = async() => { 
-         setIsLoading(true);
+       const fetchUsers = async() => { 
          try {
-          const response = await fetch(url);
-          const data = await response.json();
-          if(!response.ok){
-            throw new Error(data.message);
-          }
+          const data = await sendRequest(url);
           setLoadedUsers(data.users);
         } catch(err) {
-          setError(err.message);
+          console.log(err.message);
         }
-        setIsLoading(false);
        };
-       sendRequest(); 
-    }, []);
-
-    const errorHandler = () => {
-      setError(null);
-    }
-
+       fetchUsers(); 
+    }, [sendRequest]);
 
 
     return (
         <React.Fragment>
-        <ErrorModal error={error} onClear={errorHandler} />
+        <ErrorModal error={error} onClear={clearError} />
         {isLoading && (
           <div className="center">
             <LoadingSpinner />
