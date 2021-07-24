@@ -54,6 +54,13 @@ function UserPlaces(props){
 
     // const loadedPlaces = DUMMY_PLACES.filter(p => p.creator === userId);
 
+    const depletePlaceHandler = (deletedPlaceId) => {
+        setLoadedPlaces(prevPlaces => 
+            prevPlaces.filter( p => p.id !== deletedPlaceId)
+        );
+    };
+
+
     return(
         <React.Fragment>
         <ErrorModal error={error} onClear={clearError}/>
@@ -63,7 +70,7 @@ function UserPlaces(props){
             </div> 
         )}
         {!isLoading && loadedPlaces &&
-            <PlaceList items={loadedPlaces}/>
+            <PlaceList items={loadedPlaces} onDeletePlace={depletePlaceHandler} />
         }    
         </React.Fragment>
     );

@@ -31,6 +31,7 @@ function PlaceList(props){
                                               address={p.address}
                                               creatorId={p.creator}
                                               coordinates={p.location}  
+                                              onDeletePlace={props.onDeletePlace}
                                               />
             )}
         </ul>
