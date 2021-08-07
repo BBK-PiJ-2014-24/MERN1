@@ -79,7 +79,7 @@ const NewPlace = () => {
     //   address: formState.inputs.address.value,
     //   creator: auth.userId
     // });
-    // const headers = {'Content-Type': 'application/json'};
+     const headers = {'Authorization': 'BEARER ' +  auth.token};
     // REDIRECT
 
     try {
@@ -89,7 +89,7 @@ const NewPlace = () => {
       formData.append("address", formState.inputs.address.value);
       formData.append("creator", auth.userId);
       formData.append("image", formState.inputs.image.value);
-      await sendRequest(url, method, formData);
+      await sendRequest(url, method, formData, headers);
       historyObj.push("/");
     } catch (err) {}
   }

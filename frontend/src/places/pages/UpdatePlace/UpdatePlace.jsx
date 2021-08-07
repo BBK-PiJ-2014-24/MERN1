@@ -137,7 +137,8 @@ function UpdatePlace(props){
             title: formState.inputs.title.value,
             description: formState.inputs.description.value
         });
-        const header = {'Content-Type': 'application/json'};
+        const header = {'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' +  auth.token};
 
         try {
             const data = await sendRequest(url, method, body, header);

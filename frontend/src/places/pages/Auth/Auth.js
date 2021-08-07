@@ -82,7 +82,7 @@ const Auth = () => {
             "Content-Type": "application/json",
           }
         );
-        auth.login(data.user.id);
+        auth.login(data.userId, data.token);
       } catch (err) {}
     } else {
       try {
@@ -98,7 +98,7 @@ const Auth = () => {
           formData
         );
 
-        auth.login(data.user.id);
+        auth.login(data.userId, data.token);
       } catch (err) {}
     }
   };

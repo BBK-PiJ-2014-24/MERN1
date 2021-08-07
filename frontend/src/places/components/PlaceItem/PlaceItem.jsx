@@ -40,8 +40,10 @@ function PlaceItem(props) {
     setShowConfirmModal(false);
     const url = `http://localhost:5000/api/places/${props.id}`;
     const method = "DELETE";
+    const body = null;
+    const headers = {'Authorization': 'Bearer '+ auth.token};
     try {
-      await sendRequest(url, method);
+      await sendRequest(url, method, body, headers);
       props.onDeletePlace(props.id);
     } catch (err) {
       console.log(err);
