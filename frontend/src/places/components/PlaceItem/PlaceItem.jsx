@@ -38,7 +38,7 @@ function PlaceItem(props) {
 
   async function confirmDeleteHandler() {
     setShowConfirmModal(false);
-    const url = `http://localhost:5000/api/places/${props.id}`;
+    const url = process.env.REACT_APP_BACKEND_URL + `/places/${props.id}`;
     const method = "DELETE";
     const body = null;
     const headers = {'Authorization': 'Bearer '+ auth.token};
@@ -90,7 +90,7 @@ function PlaceItem(props) {
           {isLoading && <LoadingSpinner asOverlay />}
           <div className="place-item__image">
             <img
-              src={`http://localhost:5000/${props.image}`}
+              src={ `${process.env.REACT_APP_ASSET_URL}/${props.image}`}
               alt={props.title}
             />
           </div>

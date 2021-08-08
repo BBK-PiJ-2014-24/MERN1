@@ -71,7 +71,7 @@ const NewPlace = () => {
   async function submitHandler(e) {
     e.preventDefault();
     console.log(formState.inputs);
-    const url = "http://localhost:5000/api/places";
+    const url = process.env.REACT_APP_BACKEND_URL + "/places";
     const method = "POST";
     // const body = JSON.stringify({
     //   title: formState.inputs.title.value,

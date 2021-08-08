@@ -14,7 +14,7 @@ function Users(props){
     //   }
     // ];
 
-    const url = 'http://localhost:5000/api/users';
+    const url = process.env.REACT_APP_BACKEND_URL + '/users';
 
     const [loadedUsers, setLoadedUsers] = useState();
     // const [isLoading, setIsLoading] = useState(false);

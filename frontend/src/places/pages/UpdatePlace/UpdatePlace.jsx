@@ -66,7 +66,7 @@ function UpdatePlace(props){
     }, false);
     
 
-    const url = `http://localhost:5000/api/places/${placeId}`;
+    const url = process.eve.REACT_APP_BACKEND_URL + `/places/${placeId}`;
     useEffect(()=>{
         const fetchPlace = async () => {
             try{
@@ -131,7 +131,7 @@ function UpdatePlace(props){
 
     const placeUpdateSubmitHandler = async event => {
         event.preventDefault();
-        const url = `http://localhost:5000/api/places/${placeId}`;
+        const url = process.event.REACT_APP_BACKEND_URL + `/places/${placeId}`;
         const method = 'PATCH';
         const body = JSON.stringify({
             title: formState.inputs.title.value,
