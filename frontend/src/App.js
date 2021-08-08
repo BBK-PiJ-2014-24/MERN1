@@ -1,59 +1,21 @@
-import React, {useState, useCallback, useEffect} from 'react'
+import React, { Suspense } from 'react'
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
-import NewPlace from './places/pages/NewPlace/NewPlace';
-import UserPlaces from './places/pages/UserPlaces/UserPlaces';
-import UpdatePlace from './places/pages/UpdatePlace/UpdatePlace';
-import Auth from './places/pages/Auth/Auth';
-import Users from './user/pages/Users';
 import MainNavigation from './shared/components/Navigation/MainNavigation/MainNavigation';
 import { AuthContext } from './shared/context/auth-context';
 import { useAuth } from './shared/hooks/auth-hook';
 
+/// LAZY LOADS
+const Users = React.lazy(()=> import('./user/pages/Users'));
+const NewPlace = React.lazy(()=> import('./places/pages/NewPlace/NewPlace'));
+const UserPlaces = React.lazy(()=> import('./places/pages/UserPlaces/UserPlaces'));
+const UpdatePlace = React.lazy(()=> import('./places/pages/UpdatePlace/UpdatePlace'));
+const Auth = React.lazy(()=> import('./places/pages/Auth/Auth'));
+
 import './App.css';
+import LoadingSpinner from './shared/components/UIElements/LoadingSpinner';
 
 
 function App() {
-
-  // const [token, setToken] = useState(false);
-  // const [tokenExpirationDate, setTokenExpirationDate] = useState();
-  // const [userId, setUserId] = useState(null);
-
-  // const login = useCallback((uid, token, expirationDate) => {
-  //   setToken(token);
-  //   setUserId(uid);
-  //   const tokenExpirationDate = expirationDate || new Date(new Date().getTime() + (1000*60*60));
-  //   setTokenExpirationDate(tokenExpirationDate);
-  //   localStorage.setItem('userData', JSON.stringify({userId: uid, 
-  //                                                    token: token, 
-  //                                                    expiration: tokenExpirationDate.toISOString()
-  //                                                   }));
-  // }, []);
-
-  // const logout = useCallback(() => {
-  //   setToken(null);
-  //   setUserId(null);
-  //   setTokenExpirationDate(null);
-  //   localStorage.removeItem('userData');
-  // }, []);
-
-  // // check if token is in local storage
-  // useEffect(() => {
-  //   const storedData = JSON.parse(localStorage.getItem('userData'));
-  //   if(storedData && 
-  //      storedData.token &&
-  //      new Date(storedData.expiration) > new Date() ){
-  //     login(storedData.userId, storedData.token, new Date(storedData.expiration));
-  //   }
-  // },[login]);
-
-  // useEffect(() => {
-  //   if(token && tokenExpirationDate){
-  //     const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();  // Time in ms
-  //     logoutTimer = setTimeout(logout, remainingTime);
-  //   } else {
-  //     clearTimeout(logoutTimer);
-  //   }
-  // },[token, logout, tokenExpirationDate]);
 
  const {token, login, logout, userId } = useAuth();
 
@@ -103,7 +65,9 @@ function App() {
     <BrowserRouter>
       <MainNavigation />
         <main>
-            {routes}
+              <Suspense fallback={<div className='center'><LoadingSpinner /></div>}>
+                  {routes}
+              </Suspense>
         </main>
       </BrowserRouter>
    </AuthContext.Provider> 
